@@ -1,0 +1,83 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+}
+
+.chat-container {
+    width: 100%;
+    height: 100vh; /* Full height */
+    border: 1px solid #444;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+#messages {
+    flex: 1; /* Take available space */
+    overflow-y: auto; /* Enable scrolling */
+    display: flex;
+    flex-direction: column; /* Stack messages vertically */
+}
+
+.message {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 70%;
+    word-wrap: break-word;
+    line-height: 2; /* Gấp đôi khoảng cách giữa các dòng */
+}
+
+/* Các lớp tin nhắn của user và bot */
+.user {
+    align-self: flex-end;
+    background-color: #007bff;
+    margin-left: auto;
+    text-align: right;
+    line-height: 2; /* Gấp đôi khoảng cách giữa các dòng */
+}
+
+.bot {
+    align-self: flex-start;
+    background-color: #444;
+    margin-right: auto;
+    line-height: 2; /* Gấp đôi khoảng cách giữa các dòng */
+}
+.input-container {
+    display: flex;
+    margin-top: auto; /* Push input to the bottom */
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+#send-btn {
+    margin-left: 10px; /* Thêm khoảng cách giữa nút "Insert Image" và "Send" */
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+

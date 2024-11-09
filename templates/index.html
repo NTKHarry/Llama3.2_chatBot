@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface with Flask</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div id="messages"></div>
+        <div class="input-container">
+            <input type="file" id="image-input" accept="image/*" style="display: none;" />
+            <input type="text" id="user-input" placeholder="Type your message..." />
+            <button id="image" class="action-button">Insert Image</button>
+            <button id="send-btn" class="action-button">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <script>
+        document.getElementById('image').addEventListener('click', function() {
+            document.getElementById('image-input').click();
+        });
+
+        document.getElementById('image-input').addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('image', file);
+
+                const response = await fetch('/upload_image', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                const botResponse = data.response;
+                document.getElementById('messages').innerHTML += `<div class="message bot">${botResponse}</div>`;
+                document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+            }
+        });
+
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput) {
+                document.getElementById('messages').innerHTML += `<div class="message user">${userInput}</div>`;
+                document.getElementById('user-input').value = '';
+
+                const response = await fetch('/send_message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userInput })
+                });
+
+                const data = await response.json();
+                const botResponse = data.response;
+                document.getElementById('messages').innerHTML += `<div class="message bot">${botResponse}</div>`;
+                
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightElement(block);
+                });
+
+                document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+            }
+        }
+
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keypress', function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
